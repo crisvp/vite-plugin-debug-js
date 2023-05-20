@@ -1,24 +1,24 @@
-import path from 'path';
-import { defineConfig } from 'vitest/config';
+import path from "path";
+import { defineConfig } from "vitest/config";
 
-import vitePluginDebug from './src/plugin';
+import vitePluginDebug from "./src/plugin";
 
 export default defineConfig({
   plugins: [
     vitePluginDebug({
       rootDir: path.resolve(__dirname),
-      debugNamespace: 'my-app',
+      debugNamespace: "vite-app",
       debugEnabled: true,
-      stripComponents: ['.', '..'],
+      stripComponents: [".", ".."],
     }),
   ],
   test: {
-    name: 'vite-plugin-debug-browser',
-    include: ['test/**/*.spec.ts'],
-    environment: 'happy-dom',
+    name: "vite-plugin-debug-js",
+    include: ["test/**/*.spec.ts"],
+    environment: "happy-dom",
     environmentMatchGlobs: [
-      ['test/**/*.browser.spec.ts', 'happy-dom'],
-      ['test/**/*.node.spec.ts', 'node'],
+      ["test/**/*.browser.spec.ts", "happy-dom"],
+      ["test/**/*.node.spec.ts", "node"],
     ],
   },
 });

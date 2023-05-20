@@ -21,10 +21,10 @@ export interface ViteDebugOptions {
 
 export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
   const dirName = path.dirname(new URL(import.meta.url).pathname);
-  const virtualModuleId = "virtual:debug";
+  const virtualModuleId = "virtual:debug-js";
   const resolvedVirtualModuleId = "\0" + virtualModuleId;
   const rootDir = options?.rootDir ?? path.resolve(dirName);
-  const nameSpace = options?.debugNamespace ?? "my-app";
+  const nameSpace = options?.debugNamespace ?? "vite-app";
   const debugEnabled = options?.debugEnabled ?? true;
   const stripComponents = [".", "..", ...(options?.stripComponents ?? [])];
 
@@ -39,7 +39,7 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
   }
 
   return {
-    name: "vite-plugin-debug",
+    name: "vite-plugin-debug-js",
     async resolveId(id: string, importer?: string) {
       if (!importer) return null;
       if (id === virtualModuleId)

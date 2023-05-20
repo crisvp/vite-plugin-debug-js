@@ -1,4 +1,4 @@
-# vite-plugin-debug
+# vite-plugin-debug-js
 
 This is a small plugin for Vite to import the [debug](https://github.com/debug-js/debug) package.
 
@@ -10,13 +10,13 @@ being lazy is its own reward.
 ### Installation
 
 ```sh
-pnpm add -D vite-plugin-debug debug
+pnpm add -D vite-plugin-debug-js debug
 ```
 
 Then add to your `vite.config.ts`:
 
 ```typescript
-import vitePluginDebug from 'vite-plugin-debug';
+import vitePluginDebug from 'vite-plugin-debug-js';
 
 export default defineConfig({
   plugins: [
@@ -30,12 +30,12 @@ export default defineConfig({
 Import and call:
 
 ```typescript
-import { debug } from 'virtual:debug';
+import { debug } from 'virtual:debug-js';
 
 debug("Hello, world!");
 
 // Depending on your environment, you should see something similar to:
-//    2023-05-16 13:43:11.1030 my-app:lib:hello.ts Hello, world!
+//    2023-05-16 13:43:11.1030 vite-app:lib:hello.ts Hello, world!
 ```
 
 ### Types
@@ -43,7 +43,7 @@ debug("Hello, world!");
 Add to `vite-env.d.ts` or anywhere else in the project:
 
 ```typescript
-declare module "virtual:debug" {
+declare module "virtual:debug-js" {
   import { Debugger } from "debug";
   const debug: Debugger;
 }

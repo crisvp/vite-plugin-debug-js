@@ -1,8 +1,8 @@
 {
-  "name": "vite-plugin-debug",
+  "name": "vite-plugin-debug-js",
   "version": "1.0.0",
-  "description": "A plugin to automatically set namespaces for debugging in Vite.",
-  "homepage": "https://github.com/crisvp/vite-plugin-debug",
+  "description": "A plugin to automatically set namespaces for debug-js in Vite.",
+  "homepage": "https://github.com/crisvp/vite-plugin-debug-js",
   "type": "module",
   "types": "dist/plugin.d.ts",
   "main": "dist/plugin.js",

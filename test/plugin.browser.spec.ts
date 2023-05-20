@@ -1,10 +1,10 @@
-import Debug from 'debug';
-import { debug } from 'virtual:debug';
-import { describe, expect, it, vi } from 'vitest';
+import Debug from "debug";
+import { debug } from "virtual:debug-js";
+import { describe, expect, it, vi } from "vitest";
 
-describe('vite-plugin-debug', () => {
-  it('is running in a browser context', () => {
-    expect(typeof window).toBe('object');
+describe("vite-plugin-debug-js", () => {
+  it("is running in a browser context", () => {
+    expect(typeof window).toBe("object");
     expect(window.console.log).toBeDefined();
     expect(window.console.debug).toBeDefined();
     expect(globalThis).toBe(window);
@@ -12,11 +12,15 @@ describe('vite-plugin-debug', () => {
     expect(globalThis.console).toBe(console);
   });
 
-  it('calls console.log with namespace', async () => {
-    const logSpy = vi.spyOn(Debug, 'log');
+  it("calls console.log with namespace", async () => {
+    const logSpy = vi.spyOn(Debug, "log");
 
-    debug('This is a test');
+    debug("This is a test");
 
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining('my-app:test:plugin.browser.spec.ts This is a test'));
+    expect(logSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        "vite-app:test:plugin.browser.spec.ts This is a test"
+      )
+    );
   });
 });
