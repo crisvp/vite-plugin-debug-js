@@ -2,9 +2,9 @@
   "name": "vite-plugin-debug",
   "version": "1.0.0",
   "description": "A plugin to automatically set namespaces for debugging in Vite.",
-  "main": "dist/plugin.js",
+  "type": "module",
   "types": "dist/plugin.d.ts",
-  "module": "dist/plugin.js",
+  "main": "dist/plugin.js",
   "scripts": {
     "prepare": "tsc -p .",
     "test": "vitest run"
@@ -20,14 +20,16 @@
   "license": "ISC",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
+    "@types/debug": "^4.1.7",
     "@types/node": "^20.2.1",
     "eslint": "^8.41.0",
     "eslint-plugin-import": "^2.27.5",
     "happy-dom": "^9.19.2",
     "typescript": "^5.0.4",
-    "vitest": "^0.31.1"
+    "vitest": "^0.31.1",
+    "debug": "^4.3.4"
   },
-  "dependencies": {
+  "peerDependencies": {
     "debug": "^4.3.4"
   }
 }
