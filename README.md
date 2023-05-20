@@ -56,7 +56,7 @@ declare module "virtual:debug-js" {
 The following options can be passed to the plugin:
 
 ```typescript
-export interface ViteDebugOptions {
+{
   /** The absolute path to the root of the projecct. This will be used to generate
    *  Ids for Debug, among other things.
    */
@@ -68,16 +68,23 @@ export interface ViteDebugOptions {
   /** Enable debugging for this namespace to be active. It is also possible to set
    *  this to 'false' and use the standard Debug methods of enabling/disabling.
    */
-  debugEnabled?: boolean;
+  debugEnabled: boolean;
 
   /** Names of path components not to include in the namespace (e.g. 'src')
    */
-  stripComponents?: string[];
+  stripComponents: string[];
 }
 ```
+
+The plugin will attempt to choose a sensible default for `rootDir`, but it is
+easily confused by things like symlinks.
 
 ### Further reading
 
 [debug](https://github.com/debug-js/debug) offers some neat features for both
 browser and node environments; see its documentation for more details. This
 plugin is just a wrapper around the import so you don't have to think about namespaces.
+
+### Development and Testing
+
+PRs appreciated. The tests aren't great.

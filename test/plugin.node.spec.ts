@@ -3,7 +3,7 @@ import { debug } from "virtual:debug-js";
 import { describe, expect, it, vi } from "vitest";
 
 describe("vite-plugin-debug-js", () => {
-  it("is running in a browser context", () => {
+  it("is not running in a browser context", () => {
     expect(typeof window).toBe("undefined");
     expect(globalThis.console).toBe(console);
   });
