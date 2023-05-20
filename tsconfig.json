@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "target": "es2020",
+  "include": ["src"],
+  "files": ["src/plugin.d.ts"],
+  "lib": ["node", "es2020"],
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist"
+  }
+}
