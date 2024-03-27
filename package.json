@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-debug-js",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A plugin to automatically set namespaces for debug-js in Vite.",
   "homepage": "https://github.com/crisvp/vite-plugin-debug-js",
   "type": "module",
@@ -8,7 +8,7 @@
   "main": "dist/plugin.js",
   "scripts": {
     "prepare": "tsc -p .",
-    "test": "vitest run"
+    "test": "vitest run ; DROP_DEBUG_CALLS=1 vitest run"
   },
   "files": [
     "dist"
@@ -23,14 +23,21 @@
     "@tsconfig/recommended": "^1.0.2",
     "@types/debug": "^4.1.7",
     "@types/node": "^20.2.1",
+    "debug": "^4.3.4",
     "eslint": "^8.41.0",
     "eslint-plugin-import": "^2.27.5",
     "happy-dom": "^9.19.2",
+    "rollup": "^3.29.4",
     "typescript": "^5.0.4",
-    "vitest": "^0.31.1",
-    "debug": "^4.3.4"
+    "vite": "^4.5.3",
+    "vitest": "^0.34.6"
   },
   "peerDependencies": {
     "debug": "^4.3.4"
+  },
+  "dependencies": {
+    "acorn": "^8.11.3",
+    "acorn-walk": "^8.3.2",
+    "magic-string": "^0.29.0"
   }
 }

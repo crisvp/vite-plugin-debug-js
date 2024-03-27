@@ -1,17 +1,8 @@
 import path from "path";
-import { defineConfig } from "vitest/config";
 
 import vitePluginDebug from "./src/plugin";
 
-export default defineConfig({
-  plugins: [
-    vitePluginDebug({
-      rootDir: path.resolve(__dirname),
-      debugNamespace: "vite-app",
-      debugEnabled: true,
-      stripComponents: [".", ".."],
-    }),
-  ],
+export default {
   test: {
     name: "vite-plugin-debug-js",
     include: ["test/**/*.spec.ts"],
@@ -21,4 +12,13 @@ export default defineConfig({
       ["test/**/*.node.spec.ts", "node"],
     ],
   },
-});
+  plugins: [
+    vitePluginDebug({
+      rootDir: path.resolve(__dirname),
+      debugNamespace: "vite-app",
+      debugEnabled: true,
+      stripComponents: [".", ".."],
+      dropDebugCalls: !!process.env.DROP_DEBUG_CALLS,
+    }),
+  ],
+};

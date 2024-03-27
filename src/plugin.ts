@@ -1,4 +1,8 @@
 import path from "path";
+import type { TransformResult, Plugin as VitePlugin } from "vite";
+import MagicString from "magic-string";
+import { Parser } from "acorn";
+import * as walk from "acorn-walk";
 
 export interface ViteDebugOptions {
   /** The absolute path to the root of the projecct. This will be used to generate
@@ -13,6 +17,10 @@ export interface ViteDebugOptions {
    *  this to 'false' and use the standard Debug methods of enabling/disabling.
    */
   debugEnabled?: boolean;
+
+  /** Replaced the debug function with a noop function, and remove its arguments.
+   */
+  dropDebugCalls?: boolean;
 
   /** Names of path components not to include in the namespace (e.g. 'src')
    */
@@ -60,6 +68,45 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
             )}');
       `,
       };
+    },
+    async transform(code: string, id: string): Promise<TransformResult> {
+      if (!options?.dropDebugCalls) return { code, map: null };
+
+      const ast = Parser.parse(code, {
+        ecmaVersion: "latest",
+        sourceType: "module",
+      });
+      const ms = new MagicString(code);
+
+      walk.simple(ast, {
+        ImportDeclaration(node) {
+          if (
+            node.source.value === "debug" ||
+            node.source.value === "virtual:debug-js"
+          ) {
+            ms.remove(node.start, node.end);
+          }
+        },
+        ExpressionStatement(node) {
+          const { expression } = node;
+          if (expression.type !== "CallExpression") return;
+
+          if (expression.callee.type === "Identifier") {
+            if (expression.callee.name === "debug")
+              ms.remove(node.start, node.end);
+          }
+          if (expression.callee.type === "MemberExpression") {
+            if (
+              "name" in expression.callee.object &&
+              expression.callee.object.name === "Debug"
+            ) {
+              ms.remove(node.start, node.end);
+            }
+          }
+        },
+      });
+
+      return { code: ms.toString(), map: ms.generateMap() };
     },
   };
 }
