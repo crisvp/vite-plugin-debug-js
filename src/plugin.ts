@@ -1,8 +1,9 @@
 import path from "path";
 import type { TransformResult, Plugin as VitePlugin } from "vite";
 import MagicString from "magic-string";
-import { Parser } from "acorn";
+import { ExpressionStatement, Parser } from "acorn";
 import * as walk from "acorn-walk";
+import Debug from "debug";
 
 export interface ViteDebugOptions {
   /** The absolute path to the root of the projecct. This will be used to generate
@@ -80,28 +81,14 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
 
       walk.simple(ast, {
         ImportDeclaration(node) {
-          if (
-            node.source.value === "debug" ||
-            node.source.value === "virtual:debug-js"
-          ) {
+          if (node.source.value === "virtual:debug-js") {
             ms.remove(node.start, node.end);
           }
         },
-        ExpressionStatement(node) {
-          const { expression } = node;
-          if (expression.type !== "CallExpression") return;
-
+        CallExpression(expression) {
           if (expression.callee.type === "Identifier") {
             if (expression.callee.name === "debug")
-              ms.remove(node.start, node.end);
-          }
-          if (expression.callee.type === "MemberExpression") {
-            if (
-              "name" in expression.callee.object &&
-              expression.callee.object.name === "Debug"
-            ) {
-              ms.remove(node.start, node.end);
-            }
+              ms.remove(expression.start, expression.end);
           }
         },
       });

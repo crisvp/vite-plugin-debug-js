@@ -11,12 +11,11 @@ describe("vite-plugin-debug-js", () => {
   });
 
   it("calls console.log with namespace", async () => {
-    if (dropCalls) expect(() => Debug).toThrow();
-    else {
-      expect(() => Debug).not.toThrow();
-      const logSpy = vi.spyOn(Debug, "log");
-      debug("This is a test");
+    const logSpy = vi.spyOn(Debug, "log");
+    debug("This is a test");
 
+    if (dropCalls) expect(logSpy).not.toHaveBeenCalled();
+    else {
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining(
           "vite-app:test:plugin.node.spec.ts This is a test"
