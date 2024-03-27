@@ -19,7 +19,7 @@ export interface ViteDebugOptions {
    */
   debugEnabled?: boolean;
 
-  /** Replaced the debug function with a noop function, and remove its arguments.
+  /** Replace the debug function with a noop function, and remove its arguments.
    */
   dropDebugCalls?: boolean;
 
@@ -72,6 +72,7 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
     },
     async transform(code: string, id: string): Promise<TransformResult> {
       if (!options?.dropDebugCalls) return { code, map: null };
+      if (!id.endsWith(".js") || id.endsWith(".ts")) return { code, map: null };
 
       const ast = Parser.parse(code, {
         ecmaVersion: "latest",
@@ -85,10 +86,14 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
             ms.remove(node.start, node.end);
           }
         },
-        CallExpression(expression) {
+        ExpressionStatement(node) {
+          const { expression } = node;
+          if (expression.type !== "CallExpression") return;
           if (expression.callee.type === "Identifier") {
-            if (expression.callee.name === "debug")
-              ms.remove(expression.start, expression.end);
+            if (expression.callee.name === "debug") {
+              const f = ms.slice(node.start, node.end);
+              ms.update(node.start, node.end, "(function() {})()");
+            }
           }
         },
       });
