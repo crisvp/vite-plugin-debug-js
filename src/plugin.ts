@@ -58,6 +58,8 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
     },
     async load(id: string) {
       if (!id.startsWith(resolvedVirtualModuleId)) return null;
+      if (options?.dropDebugCalls)
+        return { code: "export const debug = () => {}" };
 
       const importer = id.split("?")[1].split("=")[1];
       return {
@@ -72,7 +74,7 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
     },
     async transform(code: string, id: string): Promise<TransformResult> {
       if (!options?.dropDebugCalls) return { code, map: null };
-      if (!id.endsWith(".js") || id.endsWith(".ts")) return { code, map: null };
+      if (!id.match(/\.[mc]?[jt]sx?$/)) return { code, map: null };
 
       const ast = Parser.parse(code, {
         ecmaVersion: "latest",
@@ -91,7 +93,6 @@ export default function vitePluginDebug(options?: Partial<ViteDebugOptions>) {
           if (expression.type !== "CallExpression") return;
           if (expression.callee.type === "Identifier") {
             if (expression.callee.name === "debug") {
-              const f = ms.slice(node.start, node.end);
               ms.update(node.start, node.end, "(function() {})()");
             }
           }
